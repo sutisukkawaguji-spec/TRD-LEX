@@ -7,6 +7,7 @@ export function generateStaticParams() {
   }));
 }
 
-export default function Page({ params }) {
-  return <ListingDetailClient params={params} />;
+export default async function Page({ params }) {
+  const resolvedParams = await params;
+  return <ListingDetailClient id={resolvedParams.id} />;
 }

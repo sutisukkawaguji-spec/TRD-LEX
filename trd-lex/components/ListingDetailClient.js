@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, use, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,8 +7,7 @@ import { mockListings, feeConfig } from '@/lib/mockData';
 
 const MapComponent = dynamic(() => import('@/components/MapComponent'), { ssr: false });
 
-export default function ListingDetailPage({ params }) {
-  const { id } = use(params);
+export default function ListingDetailPage({ id }) {
   const listing = mockListings.find(l => l.id === id);
 
   const [activeImg, setActiveImg] = useState(0);
