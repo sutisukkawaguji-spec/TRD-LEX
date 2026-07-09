@@ -1,5 +1,6 @@
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import Link from 'next/link';
 
 export const metadata = {
   title: {
@@ -94,16 +95,28 @@ function Footer() {
             <div key={title}>
               <h4 style={{ color: '#fff', fontWeight: 600, marginBottom: '1rem', fontSize: '0.9rem' }}>{title}</h4>
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {links.map(({ href, label }) => (
-                  <li key={label}>
-                    <a href={href} style={{
-                      color: 'var(--text-light)', fontSize: '0.85rem',
-                      textDecoration: 'none',
-                    }}>
-                      {label}
-                    </a>
-                  </li>
-                ))}
+                {links.map(({ href, label }) => {
+                  const isExternal = href.startsWith('http') || href.startsWith('#');
+                  return (
+                    <li key={label}>
+                      {isExternal ? (
+                        <a href={href} target={href.startsWith('http') ? '_blank' : undefined} style={{
+                          color: 'var(--text-light)', fontSize: '0.85rem',
+                          textDecoration: 'none',
+                        }}>
+                          {label}
+                        </a>
+                      ) : (
+                        <Link href={href} style={{
+                          color: 'var(--text-light)', fontSize: '0.85rem',
+                          textDecoration: 'none',
+                        }}>
+                          {label}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}

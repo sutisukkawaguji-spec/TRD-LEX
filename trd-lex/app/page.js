@@ -1,6 +1,7 @@
 import { mockListings, mockStats } from '@/lib/mockData';
 import HeroCarousel from '@/components/HeroCarousel';
 import NewsletterSection from '@/components/NewsletterSection';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'แพลตฟอร์มตลาดรองสิทธิการเช่าที่ราชพัสดุ',
@@ -75,12 +76,12 @@ function HeroSection() {
             </p>
 
             <div className="hero-btns" style={{ display:'flex', gap:'1rem', flexWrap:'wrap', marginBottom: '2.5rem' }}>
-              <a href="/listings" className="btn btn-accent btn-lg" style={{ justifyContent:'center' }}>
+              <Link href="/listings" className="btn btn-accent btn-lg" style={{ justifyContent:'center' }}>
                 🔍 ค้นหาทำเล
-              </a>
-              <a href="/sell" className="btn btn-ghost btn-lg" style={{ justifyContent:'center' }}>
+              </Link>
+              <Link href="/sell" className="btn btn-ghost btn-lg" style={{ justifyContent:'center' }}>
                 📝 ลงประกาศโอนสิทธิ
-              </a>
+              </Link>
             </div>
 
             {/* Trust indicators */}
@@ -226,7 +227,7 @@ function ListingCard({ listing }) {
   // Deterministic color from listing id
   const hue = listing.id.charCodeAt(listing.id.length - 1) * 13;
   return (
-    <a href={`/listings/${listing.id}`} style={{ textDecoration:'none', display:'block' }}>
+    <Link href={`/listings/${listing.id}`} style={{ textDecoration:'none', display:'block' }}>
       <div className="card" style={{ height:'100%' }}>
         {/* Image area */}
         <div style={{
@@ -288,7 +289,7 @@ function ListingCard({ listing }) {
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 
@@ -309,8 +310,8 @@ function CtaSection() {
           ช่องทางทางการ น่าเชื่อถือ และตรวจสอบได้ ดำเนินการภายใต้ระเบียบกรมธนารักษ์
         </p>
         <div className="hero-btns" style={{ display:'flex', gap:'1rem', justifyContent:'center', flexWrap:'wrap' }}>
-          <a href="/sell"     className="btn btn-accent btn-lg" style={{ justifyContent:'center' }}>📝 ลงประกาศโอนสิทธิ</a>
-          <a href="/listings" className="btn btn-ghost  btn-lg" style={{ justifyContent:'center' }}>🔍 ค้นหาทำเล</a>
+          <Link href="/sell"     className="btn btn-accent btn-lg" style={{ justifyContent:'center' }}>📝 ลงประกาศโอนสิทธิ</Link>
+          <Link href="/listings" className="btn btn-ghost  btn-lg" style={{ justifyContent:'center' }}>🔍 ค้นหาทำเล</Link>
         </div>
       </div>
     </section>

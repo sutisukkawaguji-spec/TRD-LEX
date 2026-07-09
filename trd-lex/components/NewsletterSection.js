@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState('');
@@ -79,9 +80,9 @@ export default function NewsletterSection() {
               />
               <label htmlFor="home-accept-checkbox" style={{ fontSize: '0.78rem', color: 'var(--text-light)', cursor: 'pointer', lineHeight: 1.4 }}>
                 ข้าพเจ้ายินยอมรับข่าวสารทางอีเมล และได้อ่านพร้อมยอมรับ{' '}
-                <a href="/about" target="_blank" style={{ color: 'var(--primary-light)', fontWeight: 600, textDecoration: 'underline' }}>
+                <Link href="/about" target="_blank" style={{ color: 'var(--primary-light)', fontWeight: 600, textDecoration: 'underline' }}>
                   ข้อกำหนดและเงื่อนไขการเปิดเผยข้อมูลที่ราชพัสดุ
-                </a>{' '}
+                </Link>{' '}
                 ตามพระราชบัญญัติที่ราชพัสดุ พ.ศ. 2562 ของกรมธนารักษ์
               </label>
             </div>
