@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getAssetUrl } from '@/lib/utils';
 
 const slides = [
   {
@@ -53,7 +54,7 @@ export default function HeroCarousel() {
           }}
         >
           <Image
-            src={slide.image}
+            src={getAssetUrl(slide.image)}
             alt={slide.title}
             fill
             sizes="(max-width: 768px) 100vw, 500px"

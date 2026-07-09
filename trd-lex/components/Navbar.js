@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { getAssetUrl } from '@/lib/utils';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -34,7 +35,7 @@ export default function Navbar() {
           {/* ── Logo ── */}
           <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
             <Image
-              src="/logo-treasury.webp"
+              src={getAssetUrl('/logo-treasury.webp')}
               alt="กรมธนารักษ์ — Value The Treasury Department"
               width={160}
               height={52}

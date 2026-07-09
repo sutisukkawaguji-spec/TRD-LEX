@@ -214,7 +214,7 @@ function FeaturedListings({ listings }) {
           {listings.map(listing => <ListingCard key={listing.id} listing={listing} />)}
         </div>
         <div style={{ textAlign:'center', marginTop:'2.5rem' }}>
-          <a href="/listings" className="btn btn-primary btn-lg">ดูประกาศทั้งหมด →</a>
+          <Link href="/listings" className="btn btn-primary btn-lg">ดูประกาศทั้งหมด →</Link>
         </div>
       </div>
     </section>

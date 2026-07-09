@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { mockListings, zoneTypes, provinces } from '@/lib/mockData';
+import Link from 'next/link';
 
 export default function ListingsPage() {
   const [search, setSearch] = useState('');
@@ -27,7 +28,7 @@ export default function ListingsPage() {
       }}>
         <div className="container">
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.75rem' }}>
-            <a href="/" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem' }}>หน้าแรก</a>
+            <Link href="/" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem' }}>หน้าแรก</Link>
             <span style={{ color: 'rgba(255,255,255,0.4)' }}>/</span>
             <span style={{ color: '#fff', fontSize: '0.85rem' }}>ค้นหาประกาศ</span>
           </div>
@@ -182,7 +183,7 @@ function ListingCardCompact({ listing, viewMode }) {
 
   if (viewMode === 'list') {
     return (
-      <a href={`/listings/${listing.id}`} style={{ textDecoration: 'none' }}>
+      <Link href={`/listings/${listing.id}`} style={{ textDecoration: 'none' }}>
         <div className="card" style={{
           display: 'flex', gap: '1.25rem', padding: '1.25rem',
           flexDirection: 'row', alignItems: 'stretch',
@@ -221,12 +222,12 @@ function ListingCardCompact({ listing, viewMode }) {
             </div>
           </div>
         </div>
-      </a>
+      </Link>
     );
   }
 
   return (
-    <a href={`/listings/${listing.id}`} style={{ textDecoration: 'none' }}>
+    <Link href={`/listings/${listing.id}`} style={{ textDecoration: 'none' }}>
       <div className="card">
         <div style={{
           height: 160, background: 'linear-gradient(135deg, var(--primary) 0%, #1e3a8a 100%)',
@@ -263,6 +264,6 @@ function ListingCardCompact({ listing, viewMode }) {
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }

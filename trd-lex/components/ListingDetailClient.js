@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { mockListings, feeConfig } from '@/lib/mockData';
+import { getAssetUrl } from '@/lib/utils';
 
 const MapComponent = dynamic(() => import('@/components/MapComponent'), { ssr: false });
 
@@ -29,16 +30,16 @@ export default function ListingDetailPage({ id }) {
   }, [isMapExpanded]);
 
   const isClickableFeature = (feat) => {
-    const keywords = ['BTS', 'MRT', 'เธฃเธ–เนเธเธเนเธฒ', 'เธ—เนเธฒเน€เธฃเธทเธญ', 'เนเธกเนเธเนเธณ', 'เธเธฒเธขเธซเธฒเธ”', 'เธ—เธฐเน€เธฅ'];
+    const keywords = ['BTS', 'MRT', 'รถไฟฟ้า', 'ท่าเรือ', 'แม่น้ำ', 'ชายหาด', 'ทะเล'];
     return keywords.some(kw => feat.toUpperCase().includes(kw));
   };
 
   if (!listing) {
     return (
       <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem' }}>
-        <div style={{ fontSize: '3rem' }}>๐”</div>
-        <h2>เนเธกเนเธเธเธเธฃเธฐเธเธฒเธจเธเธตเน</h2>
-        <Link href="/listings" className="btn btn-primary">โ เธเธฅเธฑเธเธซเธเนเธฒเธเนเธเธซเธฒ</Link>
+        <div style={{ fontSize: '3rem' }}>🔍</div>
+        <h2>ไม่พบประกาศนี้</h2>
+        <Link href="/listings" className="btn btn-primary">← กลับหน้าค้นหา</Link>
       </div>
     );
   }
@@ -49,7 +50,7 @@ export default function ListingDetailPage({ id }) {
   const withholding = Math.round(listing.transferPrice * feeConfig.withholdingTaxRate);
   const totalFee    = transferFee + stampDuty + withholding;
 
-  // Demo images โ€” use real photo for first listing, gradient placeholders for rest
+  // Demo images — use real photo for first listing, gradient placeholders for rest
   const demoImages = listing.id === 'TRD-2024-001'
     ? ['/demo-listing-01.jpg', null, null]
     : [null, null, null];
@@ -65,7 +66,7 @@ export default function ListingDetailPage({ id }) {
 
   return (
     <>
-      {/* โ”€โ”€ Page Header โ”€โ”€ */}
+      {/* ── Page Header ── */}
       <div style={{
         background: 'linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%)',
         padding: 'clamp(1.25rem,4vw,2rem) 0',
@@ -76,7 +77,7 @@ export default function ListingDetailPage({ id }) {
         <div className="container">
           {/* Breadcrumb */}
           <div style={{ display:'flex', gap:'0.4rem', alignItems:'center', marginBottom:'0.75rem', flexWrap:'wrap' }}>
-            {[['/', 'เธซเธเนเธฒเนเธฃเธ'], ['/listings', 'เธเนเธเธซเธฒเธเธฃเธฐเธเธฒเธจ']].map(([href, label]) => (
+            {[['/', 'หน้าแรก'], ['/listings', 'ค้นหาประกาศ']].map(([href, label]) => (
               <span key={href} style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
                 <Link href={href} style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.82rem' }}>{label}</Link>
                 <span style={{ color:'rgba(255,255,255,0.3)' }}>/</span>
@@ -93,31 +94,31 @@ export default function ListingDetailPage({ id }) {
             <span style={{
               padding:'0.22rem 0.75rem', borderRadius:'var(--radius-full)',
               background:'rgba(255,255,255,0.15)', color:'#fff', fontSize:'0.78rem',
-            }}>๐ข {listing.zoneType}</span>
+            }}>🏢 {listing.zoneType}</span>
             {listing.verified && (
               <span style={{
                 padding:'0.22rem 0.75rem', borderRadius:'var(--radius-full)',
                 background:'rgba(13,140,92,0.35)', color:'#6ee7b7', fontSize:'0.78rem', fontWeight:700,
-              }}>โ“ เธขเธทเธเธขเธฑเธเธ•เธฑเธงเธ•เธเนเธฅเนเธง</span>
+              }}>✓ ยืนยันตัวตนแล้ว</span>
             )}
             <span style={{ color:'rgba(255,255,255,0.55)', fontSize:'0.78rem' }}>
-              เธชเธฑเธเธเธฒ: {listing.contractNo}
+              สัญญา: {listing.contractNo}
             </span>
             <span style={{ color:'rgba(255,255,255,0.45)', fontSize:'0.78rem', marginLeft:'auto' }}>
-              ๐‘ {fmt(listing.views)} เธเธฃเธฑเนเธ
+              👁 {fmt(listing.views)} ครั้ง
             </span>
           </div>
         </div>
       </div>
 
-      {/* โ”€โ”€ Main Content โ”€โ”€ */}
+      {/* ── Main Content ── */}
       <div className="container" style={{ padding:'1.75rem 1.5rem' }}>
         <div className="detail-layout" style={{ display:'grid', gridTemplateColumns:'1fr 350px', gap:'2rem', alignItems:'start' }}>
 
-          {/* โ•โ•โ•โ• Left Column โ•โ•โ•โ• */}
+          {/* ════ Left Column ════ */}
           <div style={{ display:'flex', flexDirection:'column', gap:'1.5rem' }}>
 
-            {/* โ”€โ”€ Image Gallery โ”€โ”€ */}
+            {/* ── Image Gallery ── */}
             <div className="card" style={{ overflow:'hidden' }}>
               {/* Main Image */}
               <div style={{ height:'clamp(220px,40vw,360px)', position:'relative', overflow:'hidden',
@@ -125,7 +126,7 @@ export default function ListingDetailPage({ id }) {
 
                 {demoImages[activeImg] ? (
                   <Image
-                    src={demoImages[activeImg]}
+                    src={getAssetUrl(demoImages[activeImg])}
                     alt={listing.title}
                     fill
                     style={{ objectFit:'cover', objectPosition:'center' }}
@@ -133,7 +134,7 @@ export default function ListingDetailPage({ id }) {
                   />
                 ) : (
                   <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                    <span style={{ fontSize:'5rem', opacity:0.2 }}>๐ข</span>
+                    <span style={{ fontSize:'5rem', opacity:0.2 }}>🏢</span>
                   </div>
                 )}
 
@@ -153,10 +154,10 @@ export default function ListingDetailPage({ id }) {
                     border:'1px solid rgba(251,191,36,0.45)',
                   }}>
                     <p style={{ color:'#fbbf24', fontWeight:700, fontSize:'0.78rem', margin:0 }}>
-                      ๐”’ เธชเธดเธ—เธเธดเธเธฒเธฃเน€เธเนเธฒเธ—เธตเนเธฃเธฒเธเธเธฑเธชเธ”เธธ โ€” เนเธกเนเนเธเนเธเธฒเธฃเธเธฒเธขเธเธฒเธ”
+                      🔒 สิทธิการเช่าที่ราชพัสดุ — ไม่ใช่การขายขาด
                     </p>
                     <p style={{ color:'rgba(255,255,255,0.55)', fontSize:'0.68rem', margin:0 }}>
-                      TRD-LEX Official โ€ข เธเธฃเธกเธเธเธฒเธฃเธฑเธเธฉเน เธเธฃเธฐเธ—เธฃเธงเธเธเธฒเธฃเธเธฅเธฑเธ
+                      TRD-LEX Official • กรมธนารักษ์ กระทรวงการคลัง
                     </p>
                   </div>
                   {listing.verified && (
@@ -164,7 +165,7 @@ export default function ListingDetailPage({ id }) {
                       padding:'0.35rem 0.75rem', borderRadius:'var(--radius-full)',
                       background:'rgba(13,140,92,0.85)', backdropFilter:'blur(8px)',
                       fontSize:'0.72rem', fontWeight:700, color:'#fff',
-                    }}>โ“ เธขเธทเธเธขเธฑเธเนเธฅเนเธง</div>
+                    }}>✓ ยืนยันแล้ว</div>
                   )}
                 </div>
               </div>
@@ -180,32 +181,32 @@ export default function ListingDetailPage({ id }) {
                     transition:'all 0.2s ease',
                   }}>
                     {src ? (
-                      <Image src={src} alt="" width={72} height={52} style={{ objectFit:'cover', width:'100%', height:'100%' }} />
+                      <Image src={getAssetUrl(src)} alt="" width={72} height={52} style={{ objectFit:'cover', width:'100%', height:'100%' }} />
                     ) : (
                       <div style={{
                         width:'100%', height:'100%',
                         background:`linear-gradient(135deg, hsl(${210+i*20},55%,${25+i*8}%) 0%, hsl(${225+i*10},60%,${18+i*10}%) 100%)`,
                         display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.1rem',
-                      }}>๐ข</div>
+                      }}>🏢</div>
                     )}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* โ”€โ”€ Info Cards Grid โ”€โ”€ */}
+            {/* ── Info Cards Grid ── */}
             <div className="card" style={{ padding:'1.5rem' }}>
               <h2 style={{ fontSize:'1rem', marginBottom:'1.25rem', display:'flex', alignItems:'center', gap:'0.5rem' }}>
-                ๐“ เธเนเธญเธกเธนเธฅเธชเธณเธเธฑเธ
+                📊 ข้อมูลสำคัญ
               </h2>
               <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'0.875rem', marginBottom:'1.5rem' }}>
                 {[
-                  { label:'เธเธทเนเธเธ—เธตเน',            value:`${fmt(listing.area)} ${listing.areaUnit}`, icon:'๐“', color:'var(--primary)' },
-                  { label:'เธชเธฑเธเธเธฒเธเธเน€เธซเธฅเธทเธญ',       value:`${listing.leaseYearsRemaining} เธเธต`,       icon:'๐“…', color:'var(--accent)' },
-                  { label:'เธซเธกเธ”เธญเธฒเธขเธธเธชเธฑเธเธเธฒ',       value:`เธ.เธจ. ${listing.leaseExpiryYear+543}`,     icon:'โณ', color:'var(--warning)' },
-                  { label:'เธเนเธฒเน€เธเนเธฒ/เน€เธ”เธทเธญเธ',      value:`เธฟ${fmt(listing.monthlyRent)}`,            icon:'๐’ฐ', color:'var(--success)' },
-                  { label:'เธเนเธฒเธ•เธญเธเนเธ—เธเนเธญเธเธชเธดเธ—เธเธด', value:`เธฟ${fmt(listing.transferPrice)}`,          icon:'๐ค', color:'var(--primary-light)' },
-                  { label:'เธเธฃเธฐเน€เธ เธ—เธขเนเธฒเธ',         value:listing.zoneType,                          icon:'๐๏ธ', color:'var(--text-muted)' },
+                  { label:'พื้นที่',            value:`${fmt(listing.area)} ${listing.areaUnit}`, icon:'📐', color:'var(--primary)' },
+                  { label:'สัญญาคงเหลือ',       value:`${listing.leaseYearsRemaining} ปี`,       icon:'📅', color:'var(--accent)' },
+                  { label:'หมดอายุสัญญา',       value:`พ.ศ. ${listing.leaseExpiryYear+543}`,     icon:'⏳', color:'var(--warning)' },
+                  { label:'ค่าเช่า/เดือน',      value:`฿${fmt(listing.monthlyRent)}`,            icon:'💰', color:'var(--success)' },
+                  { label:'ค่าตอบแทนโอนสิทธิ', value:`฿${fmt(listing.transferPrice)}`,          icon:'🤝', color:'var(--primary-light)' },
+                  { label:'ประเภทย่าน',         value:listing.zoneType,                          icon:'🏙️', color:'var(--text-muted)' },
                 ].map(({ label, value, icon, color }) => (
                   <div key={label} style={{
                     padding:'0.875rem', background:'var(--surface-2)',
@@ -220,12 +221,12 @@ export default function ListingDetailPage({ id }) {
 
               {/* Location */}
               <div style={{ background: 'var(--surface-2)', borderRadius: 'var(--radius-md)', padding: '1rem', marginBottom: '1.25rem', border: '1px solid var(--border)' }}>
-                <h4 style={{ fontSize: '0.9rem', marginBottom: '0.75rem' }}>๐“ เธ—เธตเนเธ•เธฑเนเธเนเธฅเธฐเนเธเธเธ—เธตเนเธ เธฒเธเธ–เนเธฒเธขเธ—เธฒเธเธญเธฒเธเธฒเธจ</h4>
+                <h4 style={{ fontSize: '0.9rem', marginBottom: '0.75rem' }}>📍 ที่ตั้งและแผนที่ภาพถ่ายทางอากาศ</h4>
                 <p style={{ margin: 0, fontSize: '0.875rem' }}>{listing.location.address}</p>
                 <p style={{ margin: '0.25rem 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  {listing.location.district} โ€ข {listing.location.province}
+                  {listing.location.district} • {listing.location.province}
                   <span style={{ marginLeft:'0.75rem', color:'var(--primary-light)', fontWeight:600 }}>
-                    [{listing.location.lat.toFixed(4)}ยฐN, {listing.location.lng.toFixed(4)}ยฐE]
+                    [{listing.location.lat.toFixed(4)}°N, {listing.location.lng.toFixed(4)}°E]
                   </span>
                 </p>
                 
@@ -271,58 +272,58 @@ export default function ListingDetailPage({ id }) {
                     onMouseEnter={e => e.currentTarget.style.background = 'var(--primary)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'rgba(30, 58, 110, 0.95)'}
                   >
-                    ๐” เธเธขเธฒเธขเนเธเธเธ—เธตเนเนเธเธเน€เธ•เนเธก
+                    🔍 ขยายแผนที่แบบเต็ม
                   </button>
                 </div>
               </div>
 
               {/* Description */}
               <div style={{ marginBottom:'1.25rem' }}>
-                <h4 style={{ fontSize:'0.875rem', marginBottom:'0.625rem' }}>๐“ เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”</h4>
+                <h4 style={{ fontSize:'0.875rem', marginBottom:'0.625rem' }}>📝 รายละเอียด</h4>
                 <p style={{ fontSize:'0.875rem', lineHeight:1.85, color:'var(--text-muted)' }}>{listing.description}</p>
               </div>
 
               {/* Utilities */}
               {listing.utilities && (
                 <div style={{ marginTop: '1.25rem', marginBottom: '1.25rem' }}>
-                  <h4 style={{ fontSize: '0.875rem', marginBottom: '0.625rem' }}>โก เธชเธฒเธเธฒเธฃเธ“เธนเธเนเธ เธเธ•เนเธฒเธเน</h4>
+                  <h4 style={{ fontSize: '0.875rem', marginBottom: '0.625rem' }}>⚡ สาธารณูปโภคต่างๆ</h4>
                   <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                     {listing.utilities.map((ut, i) => {
                       let bgColor = 'rgba(30, 58, 110, 0.05)';
                       let textColor = 'var(--primary)';
                       let borderColor = 'rgba(30, 58, 110, 0.15)';
                       let logoUrl = null;
-                      let emoji = '๐“ถ';
+                      let emoji = '📶';
 
-                      if (ut.includes('เนเธเธเนเธฒ')) {
+                      if (ut.includes('ไฟฟ้า')) {
                         bgColor = 'rgba(120, 53, 4, 0.06)';
                         textColor = '#78350f';
                         borderColor = 'rgba(120, 53, 4, 0.2)';
                         logoUrl = '/logo-pea-circle.png';
-                        emoji = 'โก';
-                      } else if (ut.includes('เธเธฃเธฐเธเธฒ') || ut.includes('เธเธฅเธเธฃเธฐเธ—เธฒเธ')) {
+                        emoji = '⚡';
+                      } else if (ut.includes('ประปา') || ut.includes('ชลประทาน')) {
                         bgColor = 'rgba(3, 105, 161, 0.06)';
                         textColor = '#0369a1';
                         borderColor = 'rgba(3, 105, 161, 0.2)';
                         logoUrl = '/logo-pwa-circle.png';
-                        emoji = '๐’ง';
+                        emoji = '💧';
                       } else if (ut.toUpperCase().includes('AIS')) {
                         bgColor = 'rgba(101, 163, 13, 0.06)';
                         textColor = '#4d7c0f';
                         borderColor = 'rgba(101, 163, 13, 0.2)';
                         logoUrl = '/logo-ais.png';
-                        emoji = '๐ข';
+                        emoji = '🟢';
                       } else if (ut.toUpperCase().includes('TRUE')) {
                         bgColor = 'rgba(220, 38, 38, 0.05)';
                         textColor = '#b91c1c';
                         borderColor = 'rgba(220, 38, 38, 0.18)';
                         logoUrl = '/logo-true.png';
-                        emoji = '๐”ด';
+                        emoji = '🔴';
                       } else if (ut.toUpperCase().includes('3BB')) {
                         bgColor = 'rgba(249, 115, 22, 0.06)';
                         textColor = '#ea580c';
                         borderColor = 'rgba(249, 115, 22, 0.2)';
-                        emoji = '๐“ถ';
+                        emoji = '📶';
                       }
 
                       return (
@@ -356,7 +357,7 @@ export default function ListingDetailPage({ id }) {
                           }}>
                             {logoUrl ? (
                               <Image 
-                                src={logoUrl} 
+                                src={getAssetUrl(logoUrl)} 
                                 alt={ut} 
                                 width={24} 
                                 height={24} 
@@ -377,7 +378,7 @@ export default function ListingDetailPage({ id }) {
               {/* Features */}
               {listing.features && (
                 <div style={{ marginTop: '1.25rem', marginBottom: '1.25rem' }}>
-                  <h4 style={{ fontSize: '0.875rem', marginBottom: '0.625rem' }}>๐’ก เธเธธเธ”เน€เธ”เนเธเนเธฅเธฐเธชเธดเนเธเธญเธณเธเธงเธขเธเธงเธฒเธกเธชเธฐเธ”เธงเธ</h4>
+                  <h4 style={{ fontSize: '0.875rem', marginBottom: '0.625rem' }}>💡 จุดเด่นและสิ่งอำนวยความสะดวก</h4>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     {listing.features.map((f, i) => {
                       const clickable = isClickableFeature(f);
@@ -402,9 +403,9 @@ export default function ListingDetailPage({ id }) {
                               transition: 'all 0.2s ease',
                               boxShadow: isActive ? '0 0 10px rgba(13, 140, 92, 0.3)' : 'none',
                             }}
-                            title="เธเธฅเธดเธเน€เธเธทเนเธญเนเธชเธ”เธเน€เธชเนเธเธ—เธฒเธเธเธเนเธเธเธ—เธตเน"
+                            title="คลิกเพื่อแสดงเส้นทางบนแผนที่"
                           >
-                            ๐—บ๏ธ {f}
+                            🗺️ {f}
                           </button>
                         );
                       } else {
@@ -424,7 +425,7 @@ export default function ListingDetailPage({ id }) {
                               gap: '0.25rem',
                             }}
                           >
-                            โ“ {f}
+                            ✓ {f}
                           </span>
                         );
                       }
@@ -446,12 +447,12 @@ export default function ListingDetailPage({ id }) {
                   boxShadow: 'var(--shadow-sm)',
                 }}>
                   <h4 style={{ fontSize: '0.925rem', marginBottom: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    โ–๏ธ เธเนเธญเธเธณเธเธฑเธ”เนเธฅเธฐเธเธเธซเธกเธฒเธขเธเธฑเธเน€เธกเธทเธญเธ
+                    ⚖️ ข้อจำกัดและกฎหมายผังเมือง
                   </h4>
                   
                   <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
                     <div style={{ background: 'var(--surface-2)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-                      <div style={{ fontSize: '0.67rem', color: 'var(--text-light)', fontWeight: 500, marginBottom: '0.2rem' }}>เธเธฃเธฐเน€เธ เธ—เธเธฑเธเน€เธกเธทเธญเธ</div>
+                      <div style={{ fontSize: '0.67rem', color: 'var(--text-light)', fontWeight: 500, marginBottom: '0.2rem' }}>ประเภทผังเมือง</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                         <span style={{
                           display: 'inline-block',
@@ -471,29 +472,29 @@ export default function ListingDetailPage({ id }) {
                     </div>
                     
                     <div style={{ background: 'var(--surface-2)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', textAlign: 'center' }}>
-                      <div style={{ fontSize: '0.67rem', color: 'var(--text-light)', fontWeight: 500, marginBottom: '0.2rem' }}>FAR (เธเธทเนเธเธ—เธตเนเธญเธฒเธเธฒเธฃเธชเธนเธเธชเธธเธ”)</div>
+                      <div style={{ fontSize: '0.67rem', color: 'var(--text-light)', fontWeight: 500, marginBottom: '0.2rem' }}>FAR (พื้นที่อาคารสูงสุด)</div>
                       <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--primary)' }}>{listing.zoning.far}</div>
-                      <div style={{ fontSize: '0.65rem', color: 'var(--text-light)' }}>เธเธญเธเน€เธเธทเนเธญเธ—เธตเนเธ”เธดเธ</div>
+                      <div style={{ fontSize: '0.65rem', color: 'var(--text-light)' }}>ของเนื้อที่ดิน</div>
                     </div>
 
                     <div style={{ background: 'var(--surface-2)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', textAlign: 'center' }}>
-                      <div style={{ fontSize: '0.67rem', color: 'var(--text-light)', fontWeight: 500, marginBottom: '0.2rem' }}>OSR (เธ—เธตเนเธ”เธดเธเธงเนเธฒเธเธเธฃเธฒเธจเธเธฒเธเธญเธฒเธเธฒเธฃ)</div>
+                      <div style={{ fontSize: '0.67rem', color: 'var(--text-light)', fontWeight: 500, marginBottom: '0.2rem' }}>OSR (ที่ดินว่างปราศจากอาคาร)</div>
                       <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--accent)' }}>{listing.zoning.osr}</div>
-                      <div style={{ fontSize: '0.65rem', color: 'var(--text-light)' }}>เธเธญเธเธเธทเนเธเธ—เธตเนเธญเธฒเธเธฒเธฃเธฃเธงเธก</div>
+                      <div style={{ fontSize: '0.65rem', color: 'var(--text-light)' }}>ของพื้นที่อาคารรวม</div>
                     </div>
                   </div>
 
                   <div style={{ background: 'rgba(30, 58, 110, 0.03)', padding: '0.875rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', marginBottom: '0.25rem' }}>๐“ข เธเธณเธญเธเธดเธเธฒเธขเธเธฃเธฐเน€เธ เธ—เธเธฑเธเน€เธกเธทเธญเธ:</div>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', marginBottom: '0.25rem' }}>📢 คำอธิบายประเภทผังเมือง:</div>
                     <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
                       {listing.zoning.desc}
                     </p>
                   </div>
 
                   <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.5rem', background: 'rgba(220,38,38,0.03)', padding: '0.875rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(220,38,38,0.1)' }}>
-                    <span style={{ fontSize: '1.1rem' }}>โ ๏ธ</span>
+                    <span style={{ fontSize: '1.1rem' }}>⚠️</span>
                     <div>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--danger)', marginBottom: '0.25rem' }}>เธเนเธญเธเธณเธเธฑเธ”เนเธฅเธฐเธเธเธซเธกเธฒเธขเน€เธเธเธฒเธฐเธเธทเนเธเธ—เธตเน:</div>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--danger)', marginBottom: '0.25rem' }}>ข้อจำกัดและกฎหมายเฉพาะพื้นที่:</div>
                       <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
                         {listing.zoning.restriction}
                       </p>
@@ -503,26 +504,26 @@ export default function ListingDetailPage({ id }) {
               )}
             </div>
 
-            {/* โ”€โ”€ Legal Disclaimer โ”€โ”€ */}
+            {/* ── Legal Disclaimer ── */}
             <div style={{
               padding:'1rem 1.25rem', borderRadius:'var(--radius-md)',
               background:'rgba(220,38,38,0.05)', border:'1px solid rgba(220,38,38,0.18)',
               display:'flex', gap:'0.75rem',
             }}>
-              <span style={{ fontSize:'1.2rem', flexShrink:0 }}>โ ๏ธ</span>
+              <span style={{ fontSize:'1.2rem', flexShrink:0 }}>⚠️</span>
               <p style={{ margin:0, fontSize:'0.82rem', color:'var(--text-muted)', lineHeight:1.7 }}>
-                <strong style={{ color:'var(--danger)' }}>เธเนเธญเธเธงเธฃเธฃเธฐเธงเธฑเธ:</strong>{' '}
-                เธ—เธตเนเธฃเธฒเธเธเธฑเธชเธ”เธธเน€เธเนเธเธ—เธฃเธฑเธเธขเนเธชเธดเธเธเธญเธเนเธเนเธเธ”เธดเธ เธชเธดเนเธเธ—เธตเนเธชเธฒเธกเธฒเธฃเธ–เธ—เธณเนเธ”เนเธเธทเธญ{' '}
-                <strong style={{ color:'var(--text)' }}>&quot;เนเธญเธเธชเธดเธ—เธเธดเธเธฒเธฃเน€เธเนเธฒ&quot;</strong> เน€เธ—เนเธฒเธเธฑเนเธ
-                เนเธกเนเนเธเนเธเธฒเธฃเธเธทเนเธญเธเธฒเธขเธเธฃเธฃเธกเธชเธดเธ—เธเธดเน เธเธฒเธฃเธ”เธณเน€เธเธดเธเธเธฒเธฃเธเธฑเนเธเธชเธธเธ”เธ—เนเธฒเธขเธ•เนเธญเธเธเนเธฒเธเธชเธณเธเธฑเธเธเธฒเธเธเธเธฒเธฃเธฑเธเธฉเนเธเธทเนเธเธ—เธตเน
+                <strong style={{ color:'var(--danger)' }}>ข้อควรระวัง:</strong>{' '}
+                ที่ราชพัสดุเป็นทรัพย์สินของแผ่นดิน สิ่งที่สามารถทำได้คือ{' '}
+                <strong style={{ color:'var(--text)' }}>&quot;โอนสิทธิการเช่า&quot;</strong> เท่านั้น
+                ไม่ใช่การซื้อขายกรรมสิทธิ์ การดำเนินการขั้นสุดท้ายต้องผ่านสำนักงานธนารักษ์พื้นที่
               </p>
             </div>
           </div>
 
-          {/* โ•โ•โ•โ• Right Sidebar โ•โ•โ•โ• */}
+          {/* ════ Right Sidebar ════ */}
           <div className="detail-sidebar" style={{ display:'flex', flexDirection:'column', gap:'1.25rem', position:'sticky', top:76 }}>
 
-            {/* โ”€โ”€ Price + CTA โ”€โ”€ */}
+            {/* ── Price + CTA ── */}
             <div className="card" style={{ padding:'1.5rem', border:'2px solid rgba(212,146,10,0.2)' }}>
               {/* Price banner */}
               <div style={{
@@ -535,13 +536,13 @@ export default function ListingDetailPage({ id }) {
                   background:'linear-gradient(90deg, var(--accent), var(--accent-bright), var(--accent))',
                 }} />
                 <div style={{ color:'rgba(255,255,255,0.65)', fontSize:'0.75rem', marginBottom:'0.25rem' }}>
-                  เธเนเธฒเธ•เธญเธเนเธ—เธเนเธญเธเธชเธดเธ—เธเธด
+                  ค่าตอบแทนโอนสิทธิ
                 </div>
                 <div style={{ color:'#fff', fontWeight:900, fontSize:'clamp(1.5rem,4vw,2rem)', letterSpacing:'-0.5px' }}>
-                  เธฟ{fmt(listing.transferPrice)}
+                  ฿{fmt(listing.transferPrice)}
                 </div>
                 <div style={{ color:'var(--accent-bright)', fontSize:'0.72rem', fontWeight:600, marginTop:'0.2rem' }}>
-                  เธเธฒเธ— (เนเธกเนเธฃเธงเธกเธเนเธฒเธเธฃเธฃเธกเน€เธเธตเธขเธก)
+                  บาท (ไม่รวมค่าธรรมเนียม)
                 </div>
               </div>
 
@@ -553,11 +554,11 @@ export default function ListingDetailPage({ id }) {
                 style={{ borderRadius:'var(--radius-md)', justifyContent:'center', marginBottom:'0.75rem',
                   boxShadow:'0 6px 20px rgba(212,146,10,0.35)' }}
               >
-                ๐’ฌ เนเธชเธ”เธเธเธงเธฒเธกเธชเธเนเธ
+                💬 แสดงความสนใจ
               </button>
               <Link href="/fee-calculator" className="btn btn-outline w-full"
                 style={{ borderRadius:'var(--radius-md)', justifyContent:'center', textDecoration:'none' }}>
-                ๐งฎ เธเธณเธเธงเธ“เธเนเธฒเธเธฃเธฃเธกเน€เธเธตเธขเธก
+                🧮 คำนวณค่าธรรมเนียม
               </Link>
 
               {/* Stats */}
@@ -567,8 +568,8 @@ export default function ListingDetailPage({ id }) {
                 border:'1px solid var(--border)', overflow:'hidden',
               }}>
                 {[
-                  { label:'เน€เธเนเธฒเธเธก', value:fmt(listing.views), icon:'๐‘๏ธ' },
-                  { label:'เธเธงเธฒเธกเธชเธเนเธ', value:listing.interests, icon:'๐’ฌ' },
+                  { label:'เข้าชม', value:fmt(listing.views), icon:'👁️' },
+                  { label:'ความสนใจ', value:listing.interests, icon:'💬' },
                 ].map((item, i) => (
                   <div key={item.label} style={{
                     flex:1, textAlign:'center', padding:'0.875rem 0.5rem',
@@ -582,15 +583,15 @@ export default function ListingDetailPage({ id }) {
               </div>
             </div>
 
-            {/* โ”€โ”€ Fee Estimator โ”€โ”€ */}
+            {/* ── Fee Estimator ── */}
             <div className="card" style={{ padding:'1.5rem' }}>
               <h3 style={{ fontSize:'0.925rem', marginBottom:'1rem', display:'flex', alignItems:'center', gap:'0.4rem' }}>
-                ๐งฎ เธเนเธฒเธเธฃเธฃเธกเน€เธเธตเธขเธกเนเธ”เธขเธเธฃเธฐเธกเธฒเธ“
+                🧮 ค่าธรรมเนียมโดยประมาณ
               </h3>
               {[
-                { label:'เธเนเธฒเธเธฃเธฃเธกเน€เธเธตเธขเธกเนเธญเธเธชเธดเธ—เธเธด', sub:'2.5%', value:transferFee },
-                { label:'เธญเธฒเธเธฃเนเธชเธ•เธกเธเน',           sub:'0.5%', value:stampDuty   },
-                { label:'เธ เธฒเธฉเธตเธซเธฑเธ เธ“ เธ—เธตเนเธเนเธฒเธข',    sub:'1.0%', value:withholding },
+                { label:'ค่าธรรมเนียมโอนสิทธิ', sub:'2.5%', value:transferFee },
+                { label:'อากรแสตมป์',           sub:'0.5%', value:stampDuty   },
+                { label:'ภาษีหัก ณ ที่จ่าย',    sub:'1.0%', value:withholding },
               ].map(({ label, sub, value }) => (
                 <div key={label} style={{
                   display:'flex', justifyContent:'space-between', alignItems:'center',
@@ -600,34 +601,34 @@ export default function ListingDetailPage({ id }) {
                     <div style={{ fontSize:'0.8rem', color:'var(--text-muted)' }}>{label}</div>
                     <div style={{ fontSize:'0.68rem', color:'var(--text-light)' }}>{sub}</div>
                   </div>
-                  <span style={{ fontSize:'0.875rem', fontWeight:700 }}>เธฟ{fmt(value)}</span>
+                  <span style={{ fontSize:'0.875rem', fontWeight:700 }}>฿{fmt(value)}</span>
                 </div>
               ))}
               <div style={{
                 display:'flex', justifyContent:'space-between', alignItems:'center',
                 padding:'0.875rem 0', marginTop:'0.25rem',
               }}>
-                <span style={{ fontWeight:700 }}>เธฃเธงเธกเธเนเธฒเธเธฃเธฃเธกเน€เธเธตเธขเธก</span>
-                <span style={{ fontWeight:900, color:'var(--primary)', fontSize:'1.05rem' }}>เธฟ{fmt(totalFee)}</span>
+                <span style={{ fontWeight:700 }}>รวมค่าธรรมเนียม</span>
+                <span style={{ fontWeight:900, color:'var(--primary)', fontSize:'1.05rem' }}>฿{fmt(totalFee)}</span>
               </div>
               <div style={{
                 padding:'0.75rem', background:'rgba(212,146,10,0.06)',
                 border:'1px solid rgba(212,146,10,0.2)', borderRadius:'var(--radius-sm)',
                 display:'flex', justifyContent:'space-between', alignItems:'center',
               }}>
-                <span style={{ fontSize:'0.78rem', color:'var(--text-muted)' }}>เธฃเธงเธกเธ—เธฑเนเธเธชเธดเนเธ (เธเธฃเธฐเธกเธฒเธ“)</span>
+                <span style={{ fontSize:'0.78rem', color:'var(--text-muted)' }}>รวมทั้งสิ้น (ประมาณ)</span>
                 <span style={{ fontWeight:900, color:'var(--accent)', fontSize:'1rem' }}>
-                  เธฟ{fmt(listing.transferPrice + totalFee)}
+                  ฿{fmt(listing.transferPrice + totalFee)}
                 </span>
               </div>
               <p style={{ fontSize:'0.7rem', color:'var(--text-light)', margin:'0.5rem 0 0' }}>
-                * เธ•เธฑเธงเน€เธฅเธเธเธฃเธฐเธกเธฒเธ“เน€เธ—เนเธฒเธเธฑเนเธ เธเธถเนเธเธเธฑเธเธเธฒเธฃเธเธดเธเธฒเธฃเธ“เธฒเธเธญเธเธเธฃเธกเธเธเธฒเธฃเธฑเธเธฉเน
+                * ตัวเลขประมาณเท่านั้น ขึ้นกับการพิจารณาของกรมธนารักษ์
               </p>
             </div>
 
-            {/* โ”€โ”€ Seller Info โ”€โ”€ */}
+            {/* ── Seller Info ── */}
             <div className="card" style={{ padding:'1.5rem' }}>
-              <h3 style={{ fontSize:'0.925rem', marginBottom:'1rem' }}>๐‘ค เธเนเธญเธกเธนเธฅเธเธนเนเธเธฃเธฐเธเธฒเธจ</h3>
+              <h3 style={{ fontSize:'0.925rem', marginBottom:'1rem' }}>👤 ข้อมูลผู้ประกาศ</h3>
               <div style={{ display:'flex', alignItems:'center', gap:'0.875rem', marginBottom:'1rem' }}>
                 <div style={{
                   width:46, height:46, borderRadius:'50%', flexShrink:0,
@@ -641,7 +642,7 @@ export default function ListingDetailPage({ id }) {
                   <div style={{ fontWeight:700, fontSize:'0.875rem' }}>{listing.seller.name}</div>
                   {listing.seller.verified && (
                     <div style={{ fontSize:'0.7rem', color:'var(--success)', fontWeight:600, display:'flex', alignItems:'center', gap:'0.25rem' }}>
-                      <span>โ“</span> เธขเธทเธเธขเธฑเธ ThaiD เนเธฅเนเธง
+                      <span>✓</span> ยืนยัน ThaiD แล้ว
                     </div>
                   )}
                 </div>
@@ -651,15 +652,15 @@ export default function ListingDetailPage({ id }) {
                 borderRadius:'var(--radius-md)', textAlign:'center',
                 border:'1px solid var(--border)',
               }}>
-                <div style={{ fontSize:'0.78rem', color:'var(--text-muted)', marginBottom:'0.2rem' }}>๐“ {listing.seller.phone}</div>
+                <div style={{ fontSize:'0.78rem', color:'var(--text-muted)', marginBottom:'0.2rem' }}>📞 {listing.seller.phone}</div>
                 <div style={{ fontSize:'0.7rem', color:'var(--text-light)' }}>
-                  เน€เธเธญเธฃเนเนเธ—เธฃเนเธชเธ”เธเน€เธกเธทเนเธญเนเธชเธ”เธเธเธงเธฒเธกเธชเธเนเธเนเธฅเนเธง
+                  เบอร์โทรแสดงเมื่อแสดงความสนใจแล้ว
                 </div>
               </div>
 
               {/* Listed date */}
               <div style={{ marginTop:'0.875rem', display:'flex', justifyContent:'space-between', fontSize:'0.75rem', color:'var(--text-light)' }}>
-                <span>๐“… เธฅเธเธเธฃเธฐเธเธฒเธจ: {listing.listedDate}</span>
+                <span>📅 ลงประกาศ: {listing.listedDate}</span>
                 <span>#{listing.id}</span>
               </div>
             </div>
@@ -667,7 +668,7 @@ export default function ListingDetailPage({ id }) {
         </div>
       </div>
 
-      {/* โ•โ•โ•โ• Express Interest Modal โ•โ•โ•โ• */}
+      {/* ════ Express Interest Modal ════ */}
       {showInterestModal && (
         <div style={{
           position:'fixed', inset:0, zIndex:2000,
@@ -688,10 +689,10 @@ export default function ListingDetailPage({ id }) {
                   borderRadius:'var(--radius-xl) var(--radius-xl) 0 0' }} />
 
                 <div style={{ textAlign:'center', marginBottom:'1.5rem' }}>
-                  <div style={{ fontSize:'2.5rem', marginBottom:'0.75rem' }}>๐’ฌ</div>
-                  <h2 style={{ fontSize:'1.2rem', marginBottom:'0.5rem' }}>เนเธชเธ”เธเธเธงเธฒเธกเธชเธเนเธ</h2>
+                  <div style={{ fontSize:'2.5rem', marginBottom:'0.75rem' }}>💬</div>
+                  <h2 style={{ fontSize:'1.2rem', marginBottom:'0.5rem' }}>แสดงความสนใจ</h2>
                   <p style={{ fontSize:'0.875rem', margin:0 }}>
-                    เธฃเธฐเธเธเธเธฐเธชเนเธเธเนเธญเธกเธนเธฅเธเธฒเธฃเธ•เธดเธ”เธ•เนเธญเธเธญเธเธ—เนเธฒเธเนเธซเนเธเธนเนเธเธฃเธฐเธเธฒเธจ
+                    ระบบจะส่งข้อมูลการติดต่อของท่านให้ผู้ประกาศ
                   </p>
                 </div>
 
@@ -703,8 +704,8 @@ export default function ListingDetailPage({ id }) {
                 }}>
                   <div style={{ fontWeight:700, fontSize:'0.875rem', marginBottom:'0.25rem' }}>{listing.title}</div>
                   <div style={{ fontSize:'0.78rem', color:'var(--text-muted)', display:'flex', justifyContent:'space-between' }}>
-                    <span>๐“ {listing.location.province}</span>
-                    <span style={{ fontWeight:700, color:'var(--primary)' }}>เธฟ{fmt(listing.transferPrice)}</span>
+                    <span>📍 {listing.location.province}</span>
+                    <span style={{ fontWeight:700, color:'var(--primary)' }}>฿{fmt(listing.transferPrice)}</span>
                   </div>
                 </div>
 
@@ -714,20 +715,20 @@ export default function ListingDetailPage({ id }) {
                   borderRadius:'var(--radius-md)', marginBottom:'1.25rem',
                   display:'flex', alignItems:'center', gap:'0.75rem',
                 }}>
-                  <span style={{ fontSize:'1.4rem' }}>๐น๐ญ</span>
+                  <span style={{ fontSize:'1.4rem' }}>🇹🇭</span>
                   <div>
-                    <div style={{ color:'#a5f3fc', fontWeight:700, fontSize:'0.82rem' }}>เธขเธทเธเธขเธฑเธเธ•เธฑเธงเธ•เธเธเนเธฒเธ ThaiD เนเธฅเนเธง</div>
-                    <div style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.72rem' }}>เธเธฒเธขเธชเธกเธเธฒเธข เธ—เธ”เธชเธญเธ โ€” เธเธฑเธ•เธฃเธเธฃเธฐเธเธฒเธเธ ***-****-1234</div>
+                    <div style={{ color:'#a5f3fc', fontWeight:700, fontSize:'0.82rem' }}>ยืนยันตัวตนผ่าน ThaiD แล้ว</div>
+                    <div style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.72rem' }}>นายสมชาย ทดสอบ — บัตรประชาชน ***-****-1234</div>
                   </div>
-                  <span style={{ color:'#6ee7b7', fontSize:'1.2rem', marginLeft:'auto' }}>โ“</span>
+                  <span style={{ color:'#6ee7b7', fontSize:'1.2rem', marginLeft:'auto' }}>✓</span>
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label" htmlFor="interest-msg">เธเนเธญเธเธงเธฒเธกเธ–เธถเธเธเธนเนเธเธฃเธฐเธเธฒเธจ (เนเธกเนเธเธฑเธเธเธฑเธ)</label>
+                  <label className="form-label" htmlFor="interest-msg">ข้อความถึงผู้ประกาศ (ไม่บังคับ)</label>
                   <textarea
                     id="interest-msg"
                     className="form-textarea"
-                    placeholder="เน€เธเนเธ เธชเธเนเธเธ”เธนเธชเธ–เธฒเธเธ—เธตเนเธเธฃเธดเธ เธเธญเธเธฑเธ”เธซเธกเธฒเธขเนเธ”เนเนเธซเธกเธเธฃเธฑเธ..."
+                    placeholder="เช่น สนใจดูสถานที่จริง ขอนัดหมายได้ไหมครับ..."
                     value={interestMsg}
                     onChange={e => setInterestMsg(e.target.value)}
                     style={{ minHeight:90 }}
@@ -735,7 +736,7 @@ export default function ListingDetailPage({ id }) {
                 </div>
 
                 <p style={{ fontSize:'0.75rem', color:'var(--text-light)', marginBottom:'1.25rem', lineHeight:1.65 }}>
-                  เธเธฒเธฃเนเธชเธ”เธเธเธงเธฒเธกเธชเธเนเธเนเธกเนเธ–เธทเธญเน€เธเนเธเธเธฒเธฃเธเธนเธเธเธฑเธเธ—เธฒเธเธเธเธซเธกเธฒเธข เธเธฒเธฃเนเธญเธเธชเธดเธ—เธเธดเนเธเธฃเธดเธเธ•เนเธญเธเธ”เธณเน€เธเธดเธเธเธฒเธฃเธเนเธฒเธเธชเธณเธเธฑเธเธเธฒเธเธเธเธฒเธฃเธฑเธเธฉเนเธเธทเนเธเธ—เธตเนเน€เธ—เนเธฒเธเธฑเนเธ
+                  การแสดงความสนใจไม่ถือเป็นการผูกพันทางกฎหมาย การโอนสิทธิ์จริงต้องดำเนินการผ่านสำนักงานธนารักษ์พื้นที่เท่านั้น
                 </p>
 
                 <div style={{ display:'flex', gap:'0.75rem' }}>
@@ -743,14 +744,14 @@ export default function ListingDetailPage({ id }) {
                     onClick={() => setShowInterestModal(false)}
                     className="btn btn-outline"
                     style={{ flex:1, justifyContent:'center', borderRadius:'var(--radius-md)' }}
-                  >เธขเธเน€เธฅเธดเธ</button>
+                  >ยกเลิก</button>
                   <button
                     id="confirm-interest-btn"
                     onClick={handleSendInterest}
                     className="btn btn-accent"
                     style={{ flex:2, justifyContent:'center', borderRadius:'var(--radius-md)',
                       boxShadow:'0 4px 16px rgba(212,146,10,0.35)', fontSize:'0.95rem' }}
-                  >โ… เธขเธทเธเธขเธฑเธเนเธชเธ”เธเธเธงเธฒเธกเธชเธเนเธ</button>
+                  >✅ ยืนยันแสดงความสนใจ</button>
                 </div>
               </>
             ) : (
@@ -761,16 +762,16 @@ export default function ListingDetailPage({ id }) {
                   background:'rgba(13,140,92,0.1)', border:'3px solid var(--success)',
                   margin:'0 auto 1.25rem',
                   display:'flex', alignItems:'center', justifyContent:'center', fontSize:'2rem',
-                }}>โ…</div>
-                <h3 style={{ color:'var(--success)', marginBottom:'0.5rem' }}>เธชเนเธเธเธงเธฒเธกเธชเธเนเธเน€เธฃเธตเธขเธเธฃเนเธญเธข!</h3>
-                <p style={{ marginBottom:'0.75rem' }}>เธฃเธฐเธเธเธชเนเธเธเนเธญเธกเธนเธฅเนเธซเนเธเธนเนเธเธฃเธฐเธเธฒเธจเนเธฅเนเธง</p>
+                }}>✅</div>
+                <h3 style={{ color:'var(--success)', marginBottom:'0.5rem' }}>ส่งความสนใจเรียบร้อย!</h3>
+                <p style={{ marginBottom:'0.75rem' }}>ระบบส่งข้อมูลให้ผู้ประกาศแล้ว</p>
                 <div style={{
                   padding:'0.75rem 1rem', background:'var(--surface-2)',
                   borderRadius:'var(--radius-md)', fontSize:'0.82rem', color:'var(--text-muted)',
                   border:'1px solid var(--border)',
                 }}>
-                  ๐“ เน€เธเธญเธฃเนเธ•เธดเธ”เธ•เนเธญ: <strong style={{ color:'var(--text)' }}>{listing.seller.phone.replace('x', '8')}</strong>
-                  <br /><span style={{ fontSize:'0.72rem' }}>เธเธนเนเธเธฃเธฐเธเธฒเธจเธเธฐเธ•เธดเธ”เธ•เนเธญเธเธฅเธฑเธเธ เธฒเธขเนเธ 24 เธเธก.</span>
+                  📞 เบอร์ติดต่อ: <strong style={{ color:'var(--text)' }}>{listing.seller.phone.replace('x', '8')}</strong>
+                  <br /><span style={{ fontSize:'0.72rem' }}>ผู้ประกาศจะติดต่อกลับภายใน 24 ชม.</span>
                 </div>
               </div>
             )}
@@ -778,7 +779,7 @@ export default function ListingDetailPage({ id }) {
         </div>
       )}
 
-      {/* โ•โ•โ•โ• Fullscreen Map Modal โ•โ•โ•โ• */}
+      {/* ════ Fullscreen Map Modal ════ */}
       {isMapExpanded && (
         <div style={{
           position: 'fixed',
@@ -816,10 +817,10 @@ export default function ListingDetailPage({ id }) {
             }}>
               <div>
                 <h3 style={{ fontSize: '1.1rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  ๐—บ๏ธ เนเธเธเธ—เธตเนเธ เธฒเธเธ–เนเธฒเธขเธ—เธฒเธเธญเธฒเธเธฒเธจเนเธฅเธฐเธฃเธนเธเนเธเธฅเธเธ—เธตเนเธ”เธดเธ (เนเธซเธกเธ”เธเธขเธฒเธขเน€เธ•เนเธกเธซเธเนเธฒเธเธญ)
+                  🗺️ แผนที่ภาพถ่ายทางอากาศและรูปแปลงที่ดิน (โหมดขยายเต็มหน้าจอ)
                 </h3>
                 <p style={{ margin: '0.2rem 0 0', fontSize: '0.78rem', color: 'var(--text-light)' }}>
-                  {listing.title} โ€ข {listing.location.address}
+                  {listing.title} • {listing.location.address}
                 </p>
               </div>
               <button
@@ -839,7 +840,7 @@ export default function ListingDetailPage({ id }) {
                 onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
               >
-                โ– เธเธดเธ”เนเธเธเธ—เธตเน
+                ✖ ปิดแผนที่
               </button>
             </div>
 

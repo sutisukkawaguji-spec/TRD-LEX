@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { getAssetUrl } from '@/lib/utils';
 
 const MapComponent = dynamic(() => import('@/components/MapComponent'), { ssr: false });
 
@@ -587,7 +588,7 @@ export default function SellPage() {
                     >
                       {util.logo ? (
                         <div style={{ position: 'relative', width: 24, height: 24, borderRadius: '50%', overflow: 'hidden' }}>
-                          <Image src={util.logo} alt={util.label} fill style={{ objectFit: 'cover' }} />
+                          <Image src={getAssetUrl(util.logo)} alt={util.label} fill style={{ objectFit: 'cover' }} />
                         </div>
                       ) : (
                         <span style={{ fontSize: '1.2rem' }}>{util.icon}</span>
@@ -747,7 +748,7 @@ export default function SellPage() {
                     }}
                   >
                     <img 
-                      src={img} 
+                      src={getAssetUrl(img)} 
                       alt="preview" 
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                     />
@@ -1013,7 +1014,7 @@ export default function SellPage() {
                               border: '1px solid var(--border)' 
                             }}
                           >
-                            <img src={img} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src={getAssetUrl(img)} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                           </div>
                         ))}
                       </div>
