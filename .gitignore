@@ -1,0 +1,18 @@
+# Ignore documents and binary files in root
+*.docx
+*.webp
+*.pdf
+
+# Ignore IDE settings and systems files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Next.js and Node.js files in subdirectories (as fallback)
+**/node_modules/
+**/.next/
+**/out/
+**/build/
+**/.env*.local
+**/*.log
