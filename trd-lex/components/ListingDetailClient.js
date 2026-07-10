@@ -5,6 +5,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { mockListings, feeConfig } from '@/lib/mockData';
 import { getAssetUrl } from '@/lib/utils';
+import InvestmentYieldCard from '@/components/InvestmentYieldCard';
 
 const MapComponent = dynamic(() => import('@/components/MapComponent'), { ssr: false });
 
@@ -504,6 +505,100 @@ export default function ListingDetailPage({ id }) {
               )}
             </div>
 
+            {/* ── Engineering & Structural Data ── */}
+            <div className="card" style={{ padding: '1.5rem', background: '#fff', border: '1px solid var(--border)' }}>
+              <h3 style={{ fontSize: '1rem', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
+                🏗️ ข้อมูลวิศวกรรมโครงสร้างและข้อจำกัดการใช้อาคาร (Engineering Data)
+              </h3>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: 1.55 }}>
+                ข้อมูลวิศวกรรมโครงสร้างของสิ่งปลูกสร้างเพื่อวางแผนในการปรับปรุงอาคาร เสริมฐานราก หรือรองรับน้ำหนักเชิงพาณิชย์
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }} className="grid-2">
+                <div style={{ background: 'var(--surface-2)', padding: '0.75rem', borderRadius: 'var(--radius-md)' }}>
+                  <div style={{ fontSize: '0.67rem', color: 'var(--text-light)', fontWeight: 600 }}>อัตราการรองรับน้ำหนัก (Load Capacity)</div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--primary)', marginTop: '0.2rem' }}>
+                    {listing.id === 'TRD-2024-001' ? '450 kg/sq.m. (โครงสร้างคอนกรีตเสริมเหล็กหนาพิเศษ)' : 
+                     listing.id === 'TRD-2024-003' ? '250 kg/sq.m. (ตึกแถวโบราณรับน้ำหนักจำกัด)' : 
+                     listing.id === 'TRD-2024-006' ? '600 kg/sq.m. (พื้นที่โรงงาน/โกดังเก่ารับน้ำหนักสูง)' : 
+                     '200 kg/sq.m. (โครงสร้างพื้นฐานทั่วไป)'}
+                  </div>
+                </div>
+                <div style={{ background: 'var(--surface-2)', padding: '0.75rem', borderRadius: 'var(--radius-md)' }}>
+                  <div style={{ fontSize: '0.67rem', color: 'var(--text-light)', fontWeight: 600 }}>ประวัติการดูแลรักษา (Maintenance History)</div>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text)', marginTop: '0.2rem', lineHeight: 1.45 }}>
+                    {listing.id === 'TRD-2024-001' ? 'ปรับปรุงระบบไฟฟ้า-ประปาปี 2565, ทดสอบระบบดับเพลิงประจำปี' :
+                     listing.id === 'TRD-2024-003' ? 'ซ่อมแซมโครงสร้างหลังคาไม้ปี 2564, ต้องตรวจสอบปูนร้าวปีละครั้ง' :
+                     listing.id === 'TRD-2024-006' ? 'ทำกำแพงกันตลิ่งทรุดปี 2566, ลงเสาเข็มไมโครไพล์เพิ่มพื้นที่ตลิ่ง' :
+                     'ตรวจสอบโครงสร้างตามรอบปกติ ไม่มีการชำรุดเสียหายร้ายแรง'}
+                  </div>
+                </div>
+              </div>
+              <div style={{ background: 'rgba(217, 119, 6, 0.04)', border: '1px solid rgba(217, 119, 6, 0.2)', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
+                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '0.35rem' }}>
+                  🚧 ข้อจำกัดการปรับปรุงอาคาร (Building Modification Constraints)
+                </div>
+                <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.55 }} className="font-legal">
+                  {listing.id === 'TRD-2024-001' ? 'เนื่องจากอยู่ใกล้แนวรถไฟฟ้า BTS ระยะถอยร่นและโครงสร้างฐานรากต้องไม่กระทบอุโมงค์หรือโครงสร้างสาธารณะ และควบคุมการต่อเติมระเบียงยื่นภายนอก' :
+                   listing.id === 'TRD-2024-003' ? 'เขตอนุรักษ์ศิลปวัฒนธรรมวังบูรพา ห้ามทุบทำลายโครงสร้างผนังอิฐก่อเดิม (Shared Wall) ภายนอก และห้ามยกความสูงเกินตึกข้างเคียง' :
+                   listing.id === 'TRD-2024-006' ? 'ห้ามตอกเสาเข็มแบบส่งแรงสั่นสะเทือนในระยะ 30 เมตรจากเขื่อนกั้นน้ำเจ้าพระยา ต้องใช้เสาเข็มเจาะระบบแห้ง และควบคุมระดับน้ำระบายทิ้ง' :
+                   'การต่อเติมดัดแปลงต้องออกแบบโครงสร้างโดยวิศวกรที่ได้รับใบอนุญาตภาคีวิศวกรขึ้นไป และต้องยื่นเรื่องล่วงหน้าไม่น้อยกว่า 45 วัน'}
+                </p>
+              </div>
+            </div>
+
+            {/* ── Appraisal Value vs Market Trend ── */}
+            <div className="card" style={{ padding: '1.5rem', background: '#fff', border: '1px solid var(--border)' }}>
+              <h3 style={{ fontSize: '1rem', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
+                📊 แนวโน้มราคาประเมินและมูลค่าตลาด (Appraisal & Market Trend)
+              </h3>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: 1.55 }}>
+                เปรียบเทียบราคาตอบแทนโอนสิทธิ์ที่ตั้งในประกาศกับราคาประเมินกลางธนารักษ์และราคาตลาดใกล้เคียง
+              </p>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '1.5rem', alignItems: 'center' }} className="grid-2">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', marginBottom: '0.2rem' }}>
+                      <span style={{ fontWeight: 600 }}>ราคาเสนอโอนสิทธิ์ในประกาศ</span>
+                      <span style={{ color: 'var(--accent)', fontWeight: 700 }}>฿{fmt(listing.transferPrice)}</span>
+                    </div>
+                    <div style={{ height: '12px', background: 'var(--surface-2)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: '90%', background: 'linear-gradient(95deg, var(--accent-light), var(--accent))', borderRadius: '3px' }} />
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', marginBottom: '0.2rem' }}>
+                      <span style={{ fontWeight: 600 }}>ราคาประเมินสิทธิ์กลาง (ธนารักษ์)</span>
+                      <span style={{ color: 'var(--primary)', fontWeight: 700 }}>฿{fmt(Math.round(listing.transferPrice * 0.85))}</span>
+                    </div>
+                    <div style={{ height: '12px', background: 'var(--surface-2)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: '76%', background: 'linear-gradient(95deg, var(--primary-light), var(--primary))', borderRadius: '3px' }} />
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', marginBottom: '0.2rem' }}>
+                      <span style={{ fontWeight: 600 }}>ราคาตลาดเฉลี่ยบริเวณใกล้เคียง</span>
+                      <span style={{ color: 'var(--text-light)', fontWeight: 700 }}>฿{fmt(Math.round(listing.transferPrice * 1.05))}</span>
+                    </div>
+                    <div style={{ height: '12px', background: 'var(--surface-2)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: '100%', background: '#94a3b8', borderRadius: '3px' }} />
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ background: 'rgba(5, 150, 105, 0.05)', border: '1px solid rgba(5, 150, 105, 0.2)', padding: '0.85rem', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+                  <span style={{ fontSize: '1.25rem' }}>📈</span>
+                  <div style={{ fontSize: '0.67rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>ความคุ้มค่าเทียบตลาด</div>
+                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--success)', margin: '0.15rem 0' }}>
+                    +15% ต่ำกว่าตลาด
+                  </div>
+                  <p style={{ margin: 0, fontSize: '0.65rem', color: 'var(--text-light)', lineHeight: 1.4 }}>
+                    ราคาเสนอโอนสิทธิ์ต่ำกว่าราคาอสังหาริมทรัพย์ซื้อขายบริเวณโดยรอบ เหมาะแก่การพัฒนา
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* ── Legal Disclaimer ── */}
             <div style={{
               padding:'1rem 1.25rem', borderRadius:'var(--radius-md)',
@@ -511,7 +606,7 @@ export default function ListingDetailPage({ id }) {
               display:'flex', gap:'0.75rem',
             }}>
               <span style={{ fontSize:'1.2rem', flexShrink:0 }}>⚠️</span>
-              <p style={{ margin:0, fontSize:'0.82rem', color:'var(--text-muted)', lineHeight:1.7 }}>
+              <p style={{ margin:0, fontSize:'0.82rem', color:'var(--text-muted)', lineHeight:1.7 }} className="font-legal">
                 <strong style={{ color:'var(--danger)' }}>ข้อควรระวัง:</strong>{' '}
                 ที่ราชพัสดุเป็นทรัพย์สินของแผ่นดิน สิ่งที่สามารถทำได้คือ{' '}
                 <strong style={{ color:'var(--text)' }}>&quot;โอนสิทธิการเช่า&quot;</strong> เท่านั้น
@@ -625,6 +720,13 @@ export default function ListingDetailPage({ id }) {
                 * ตัวเลขประมาณเท่านั้น ขึ้นกับการพิจารณาของกรมธนารักษ์
               </p>
             </div>
+
+            {/* ── Investment ROI Calculator Widget ── */}
+            <InvestmentYieldCard 
+              baseTransferFee={listing.transferPrice} 
+              baseMonthlyRent={listing.monthlyRent} 
+              remainingYears={listing.leaseYearsRemaining} 
+            />
 
             {/* ── Seller Info ── */}
             <div className="card" style={{ padding:'1.5rem' }}>
